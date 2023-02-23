@@ -3,29 +3,21 @@
 #include "circlemath.h"
 
 int main() {
-    pid_t pid;
+    pid_t pid = fork();
 
-    pid = fork();
+    if (pid == -1) {
+        printf("Error forking process.\n");
+        return 1;
+    }
 
-    if (pid == 0) {
-        // Child process
-        int radius1 = 3;
-        int radius2 = 5;
-        double area1 = area(radius1);
-        double circumference1 = circumference(radius1);
-        double area2 = area(radius2);
-        double circumference2 = circumference(radius2);
-        printf("Radius: %d\nArea: %.2f\nCircumference: %.2f\n", radius1, area1, circumference1);
-        printf("Radius: %d\nArea: %.2f\nCircumference: %.2f\n", radius2, area2, circumference2);
-        exit(0);
-    } else if (pid < 0) {
-        // Error occurred
-        fprintf(stderr, "Fork failed\n");
-        exit(1);
-    } else {
-        // Parent process
-        wait(NULL);
-        printf("Child complete\n");
+    if (pid == 0) { // child process
+        int radius1 = 3, radius2 = 5;
+        printf("Radius: %d\n", radius1);
+        printf("Area: %.2lf\n", area(radius1));
+        printf("Circumference: %.2lf\n", circumference(radius1));
+        printf("Radius: %d\n", radius2);
+        printf("Area: %.2lf\n", area(radius2));
+        printf("Circumference: %.2lf\n", circumference(radius2));
     }
 
     return 0;
